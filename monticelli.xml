@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<documento>
+    <linguaggio>Python</linguaggio>
+    <contenuti>
+        <strutture_dati>Liste</strutture_dati>
+        <funzioni>def</funzioni>
+        <strutture_selezione>if else</strutture_selezione>
+        <iterazione>for e while</iterazione>
+        <spiegazione>linguaggio di programmazione di alto livello, 
+            interpretato e versatile, noto per la sua sintassi chiara e leggibile, 
+            simile all'inglese</spiegazione>
+        <esempio_codice><![CDATA[print("Hello World")]]></esempio_codice>
+    </contenuti>
+</documento>

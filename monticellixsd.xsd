@@ -1,0 +1,16 @@
+<?xsd version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="linguaggio" type="xs:string"/>
+    <xs:element name="contenuti">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="strutture_dati" type="xs:string"/>
+                <xs:element name="funzioni" type="xs:string"/>
+                <xs:element name="strutture_selezione" type="xs:string"/>
+                <xs:element name="iterazione" type="xs:string"/>
+                <xs:element name="spiegazione" type="xs:string"/>
+                <xs:element name="esempio_codice" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
