@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified">
+    
+    <!-- elemento contenitore -->
+    <xs:element name="documentazioni_tecniche">
+        <xs:complexType>
+            <xs:sequence>
+                <!-- una o piu documentazioni -->
+                <xs:element name="documentazione" 
+                           type="DocumentazioneType" 
+                           minOccurs="1" 
+                           maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <!-- TIPO COMPLESSO: Documentazione -->
+    <xs:complexType name="DocumentazioneType">
+        <xs:sequence>
+            <xs:element name="linguaggio" type="NomeLinguaggio"/>
+            <xs:element name="descrizione" type="Descrizione"/>
+            <xs:element name="contenuti" type="Contenuti"/>
+        </xs:sequence>
+    </xs:complexType>
+  
+    
+    <!-- TIPO SEMPLICE: Nome linguaggio con enumerazione -->
+    <xs:simpleType name="NomeLinguaggio">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Python"/>
+            <xs:enumeration value="Java"/>
+            <xs:enumeration value="JavaScript"/>
+            <xs:enumeration value="C++"/>
+            <xs:enumeration value="C#"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    
+    <!-- TIPO SEMPLICE: Descrizione con lunghezza minima -->
+    <xs:simpleType name="Descrizione">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="10"/>
+            <xs:maxLength value="500"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <!-- TIPO COMPLESSO: Contenuti -->
+    <xs:complexType name="Contenuti">
+        <xs:sequence>
+            <!-- 1 o piu contenuti -->
+            <xs:element name="contenuto" 
+                       type="Contenuto" 
+                       minOccurs="1" 
+                       maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <!-- TIPO COMPLESSO: Singolo Contenuto -->
+    <xs:complexType name="Contenuto">
+        <xs:sequence>
+            <xs:element name="nome" type="NomeContenuto"/>
+            <xs:element name="spiegazione" type="Spiegazione"/>
+            <xs:element name="esempio_codice" type="EsempioCodice"/>
+        </xs:sequence>
+        
+        <!-- ATTRIBUTO: Categoria -->
+        <xs:attribute name="categoria" type="Categoria" use="required"/>
+    </xs:complexType>
+    
+    <!-- TIPO SEMPLICE: Nome del contenuto -->
+    <xs:simpleType name="NomeContenuto">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="2"/>
+            <xs:maxLength value="100"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <!-- TIPO SEMPLICE: Spiegazione -->
+    <xs:simpleType name="Spiegazione">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="20"/>
+            <xs:maxLength value="2000"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <!-- TIPO SEMPLICE: Esempio di codice-->
+    <xs:simpleType name="EsempioCodice">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="10"/>
+            <xs:maxLength value="10000"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <!-- TIPO SEMPLICE: Categorie possibili -->
+    <xs:simpleType name="Categoria">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="strutture_dati_statiche"/>
+            <xs:enumeration value="strutture_dati_dinamiche"/>
+            <xs:enumeration value="strutture_selezione"/>
+            <xs:enumeration value="strutture_iterazione"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+</xs:schema>

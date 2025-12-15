@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<documentazioni_tecniche xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                         xsi:noNamespaceSchemaLocation="monticelli.xsd">
+    <!--i testi li ho presi da w3schools-->
+    <!-- documentazione: Python -->
+    <documentazione>
+        <linguaggio>Python</linguaggio>
+        <descrizione>Linguaggio di programmazione ad alto livello, interpretato e versatile, noto per la sua sintassi chiara e leggibile.</descrizione>
+        
+        <contenuti>
+            <!-- Srtutture Dati Statiche -->
+            <contenuto categoria="strutture_dati_statiche">
+                <nome>Tuple</nome>
+                <spiegazione>
+                    Le tuple vengono utilizzate per memorizzare più elementi in un'unica variabile.
+
+                    Tuple è uno dei 4 tipi di dati integrati in Python utilizzati per memorizzare raccolte di dati; gli altri 3 sono List , Set e Dictionary , tutti con qualità e utilizzi diversi.
+
+                    Una tupla è una raccolta ordinata e immutabile .
+
+                    Le tuple vengono scritte tra parentesi tonde.
+                </spiegazione>
+                <esempio_codice><![CDATA[
+# Creazione
+mytuple = ("apple", "banana", "cherry")
+
+# Accesso agli elementi
+print(thistuple)[0])        # Output: apple
+
+# Tentativo di modifica (genera errore)
+                ]]></esempio_codice>
+            </contenuto>
+            
+            <!-- Strutture Dati Dinamiche -->
+            <contenuto categoria="strutture_dati_dinamiche">
+                <nome>Liste</nome>
+                <spiegazione>
+                    Gli elenchi vengono utilizzati per memorizzare più elementi in un'unica variabile.
+
+                    Gli elenchi sono uno dei 4 tipi di dati integrati in Python utilizzati per archiviare raccolte di dati; gli altri 3 sono Tuple , Set e Dictionary , tutti con qualità e utilizzi diversi.
+
+                    Gli elenchi vengono creati utilizzando le parentesi quadre
+                </spiegazione>
+                <esempio_codice><![CDATA[
+# Creazione
+thislist = ["apple", "banana", "cherry"]
+
+# Aggiunta
+print(thislist) # Output: ['apple', 'banana', 'cherry']
+
+# Rimozione
+thislist.remove("banana")
+print(thislist)  # Output: ['apple', 'cherry']
+
+# Modifica
+thislist[1] = "blackcurrant"
+print(thislist)  # Output: ['apple', 'blackcurrant', 'cherry']
+                ]]></esempio_codice>
+            </contenuto>
+            
+            
+            <!-- Strutture di Selezione -->
+            <contenuto categoria="strutture_selezione">
+                <nome>If-Elif-Else</nome>
+                <spiegazione>
+                    L'istruzione if valuta una condizione (un'espressione che restituisce True o False ). Se la condizione è vera, viene eseguito il blocco di codice all'interno dell'istruzione if. Se la condizione è falsa, il blocco di codice viene saltato.
+                    Quando si usa elif , Python valuta le condizioni dall'alto verso il basso. Non appena trova una condizione vera, esegue quel blocco e salta tutte le condizioni rimanenti.
+                    L' istruzione else fornisce un'azione predefinita quando nessuna delle condizioni precedenti è vera. Consideratela una soluzione "onnicomprensiva" per qualsiasi scenario non coperto dalle istruzioni if ​​ed elif
+                </spiegazione>
+                <esempio_codice><![CDATA[
+# Struttura if-elif-else
+voto = 27
+
+if voto >= 30:
+    print("Ottimo!")
+    lode = True
+elif voto >= 24:
+    print("Buono")
+    lode = False
+elif voto >= 18:
+    print("Sufficiente")
+    lode = False
+else:
+    print("Insufficiente")
+    lode = False
+
+# If con operatori logici
+età = 20
+patente = True
+
+if età >= 18 and patente:
+    print("Puoi guidare")
+elif età >= 18 and not patente:
+    print("Hai l'età ma ti manca la patente")
+else:
+    print("Sei troppo giovane")
+                ]]></esempio_codice>
+            </contenuto>
+  
+            
+            <!-- Strutture di Iterazione -->
+            <contenuto categoria="strutture_iterazione">
+                <nome>Ciclo For</nome>
+                <spiegazione>
+                    Un ciclo for viene utilizzato per iterare su una sequenza (che può essere una lista, una tupla, un dizionario, un set o una stringa).
+
+                    Questo metodo è meno simile alla parola chiave for di altri linguaggi di programmazione e funziona più come un metodo iteratore, come quello che si trova in altri linguaggi di programmazione orientati agli oggetti.
+
+                    Con il ciclo for possiamo eseguire una serie di istruzioni, una volta per ogni elemento di un elenco, tupla, set ecc.
+                </spiegazione>
+                <esempio_codice><![CDATA[
+# For
+fruits = ["apple", "banana", "cherry"]
+for x in fruits:
+  print(x) # Output:apple
+                    banana
+                    cherry
+                ]]></esempio_codice>
+            </contenuto>
+            
+            <contenuto categoria="strutture_iterazione">
+                <nome>Ciclo While</nome>
+                <spiegazione>
+                    Con il ciclo while possiamo eseguire una serie di istruzioni finché una condizione è vera.
+                </spiegazione>
+                <esempio_codice><![CDATA[
+# While
+i = 1
+while i < 6:
+  print(i)
+  i += 1  # Output: 1
+                    2
+                    3
+                    4
+                    5 
+                ]]></esempio_codice>
+            </contenuto>
+        </contenuti>
+    </documentazione>
+    
+    
+</documentazioni_tecniche>
