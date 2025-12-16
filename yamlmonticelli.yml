@@ -1,0 +1,13 @@
+# Realizzare in YAML una rubrica dove si legga:
+# il nome dell'alunno/a, 
+# il voto pratico, 
+# quello teorico, 
+# se insufficiente calcolando la media e scrivendo sì/no
+# un commento sulla prova sostenuta.
+rubrica:
+  -nome: Lorenzo Sanchez
+  -voto pratico: 7
+  -voto teorico: 5
+  -media: 6
+  -insufficiente: no
+  -commento: Bravo ma non si applica
