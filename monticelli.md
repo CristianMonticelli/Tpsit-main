@@ -71,4 +71,3 @@ Schema di validazione che definisce:
 [^1]: Utilizzo di heading multipli (# ## ###) per gerarchia del contenuto
 [^2]: Note esplicative aggiunte al documento per chiarimenti aggiuntivi
 [^3]: Lista di controllo con checkbox per tracking dei task completati  
-[^4]: Risorsa online per validazione e editing di file YAML
