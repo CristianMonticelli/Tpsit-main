@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rubrica>
+    <nome>Lorenzo Sanchez</nome>
+    <voto_pratico>7</voto_pratico>
+    <voto_teorico>5</voto_teorico>
+    <media>6</media>
+    <insufficiente>no</insufficiente>
+    <commento>Bravo ma non si applica</commento>
+</rubrica>

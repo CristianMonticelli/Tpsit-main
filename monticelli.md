@@ -1,51 +1,74 @@
+
 # Esercizio markdown
-+ Usare vari livelli per titolo, sottotitolo e testo
-+ Scrivere le informazioni più importanti in grassetto e/o corsivo
-+ Realizzare delle note a piè di pagina 
-+ Realizzare 3 domande usando una checklist per le risposte.
 
-# Espressioni regolari in python
-#### Creare nel linguaggio di programmazione che preferisci (PHP, C#, Java, ...) una classe (ad es. EsprReg) che data una espressione regolare e una stringa valida quest'ultima, ovvero restituisce a video il testo "match" oppure "mismatch".
-## In particolare si vogliono vedere:
+## Obiettivo dell'esercizio
++ Usare **vari livelli** per titolo, sottotitolo e testo[^1]
++ Scrivere le informazioni più importanti in **grassetto** e/o *corsivo*
++ >Realizzare delle *note a piè di pagina*[^2]
++ Realizzare una checklist per le risposte[^3]
 
-1. *attributi e metodi* con gli opportuni **modificatori** di classe
-2. ***almeno due metodi*** di cui **uno** che riceve in input l'espressione regolare e l'altro che effettua il test per la validazione e restituisce l'output suddetto
-3. il *costruttore della vostra classe* (potete anche estenderne una già prevista se preferite) e *un'istanza della vostra classe* nel main in cui vengono richiamati i metodi di cui sopra 
-4. in alternativa potete anche *creare una classe di utilità con metodi* e proprietà statici e utilizzarla **opportunamente nel main** in cui vengono richiamati i metodi di cui sopra
-5. ***codice ben indentato, commentato e modulare*** (ovvero un file dedicato per ogni parte logica del programma). 
+---
 
-## N.B.:
->+ il tutto va versionato in un repository nel vostro GitHub.
->+ La consegna prevede il link al vostro repository!
->+ Non c'è tanto codice da scrivere, fatemi vedere che avete capito entrambi i concetti: versionamento (i vari comandi di git) e espressioni regolari.
->+ Per domande tecniche sul linguaggio di programmazione scelto chiedete al vostro docente di Informatica che sicuramente è più bravo di me :)
+# Esercizio su YAML, XML e XSD
 
-## Esercizio python
-```
-class EsprReg:
-    def __init__(self, espressioneRegolare):
-        self._espressioneRegolare = espressioneRegolare
-    @property
-    def espressioneRegolare(self):
-        return self._espressioneRegolare
-    @espressioneRegolare.setter
-    def espressioneRegolare(self,new_espressioneRegolare):
-        self._espressioneRegolare = new_espressioneRegolare
-    def matching(self, stringa):
-        pattern = re.compile(self._espressioneRegolare)
-        matching = pattern.match (stringa)
-        if matching == None:
-            return "mismatch"
-        else:
-            return "match"
-espressioneinput = input("espressione regolare:")
-espresione1 = EsprReg(espressioneinput)
-stringaInput = input("stringa da controllare:")
-controllo = espresione1.matching(stringaInput)
-print(controllo)
-```
-## Check list
-- [x] attributi
-- [x] almeno due metodi
-- [x] costruttore della vostra classe
-- [ ] codice ben indentato, commentato e modulare
+## Realizzare in YAML una rubrica dove si legga:
+
+1. il **nome** dell'alunno/a, 
+2. il **voto** *pratico*, 
+3. quello *teorico*, 
+4. se insufficiente **calcolando la media** e scrivendo sì/no
+5. un **commento** sulla prova sostenuta.
+
+### File creati:
+
+#### YAML (yamlmonticelli.yml)
+Rubrica con i dati dello studente **Lorenzo Sanchez**:
+- Voto pratico: 7
+- Voto teorico: 5  
+- Media: 6
+- Insufficiente: no
+- Commento: *Bravo ma non si applica*
+
+#### XML (rubrica.xml)
+Conversione della rubrica YAML in formato XML con struttura ben formattata.
+
+#### XSD (rubrica.xsd)
+Schema di validazione che definisce:
+- **Tipi di dati**: string, int, decimal
+- **Restrizioni**: voti da 1 a 10, media con una cifra decimale
+- **Enumerazioni**: campo insufficiente (sì/no)
+
+> Per validare lo schema YAML puoi usare questo editor online: https://codebeautify.org/yaml-editor-online[^4]
+
+
+
+## Domande di Verifica (Checklist)
+
+### Domanda 1: Il file YAML contiene tutti gli elementi richiesti?
+- [ ] Nome dell'alunno presente
+- [ ] Voto pratico definito
+- [ ] Voto teorico definito  
+- [ ] Media calcolata
+- [ ] Indicazione insufficiente (sì/no)
+- [ ] Commento sulla prova
+
+### Domanda 2: La conversione XML è corretta?
+- [ ] Struttura XML ben formattata
+- [ ] Elementi corrispondenti al YAML
+- [ ] Dati dello studente preservati
+- [ ] Sintassi XML valida
+
+### Domanda 3: Lo schema XSD è completo?
+- [ ] Definizione dei tipi di dati
+- [ ] Restrizioni sui valori dei voti
+- [ ] Enumerazioni per campo insufficiente
+- [ ] Validazione della struttura XML
+
+---
+
+## Riferimenti
+
+[^1]: Utilizzo di heading multipli (# ## ###) per gerarchia del contenuto
+[^2]: Note esplicative aggiunte al documento per chiarimenti aggiuntivi
+[^3]: Lista di controllo con checkbox per tracking dei task completati  
+[^4]: Risorsa online per validazione e editing di file YAML
