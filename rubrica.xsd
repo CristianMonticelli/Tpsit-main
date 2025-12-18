@@ -7,7 +7,7 @@
             <xs:sequence>
                 <xs:element name="nome" type="xs:string"/>
                 <xs:element name="voto_pratico" type="voto"/>
-                <xs:element name="voto_pratico" type="voto"/>
+                <xs:element name="voto_teorico" type="voto"/>
                 <xs:element name="media_dei_voti" type="media"/>
                 <xs:element name="insufficiente" type="insufficiente"/>
                 <xs:element name="commento" type="xs:string"/>
@@ -17,7 +17,7 @@
 
     <xs:simpleType name="voto">
         <xs:annotation>
-            <xs:documentation>Voto pratico (1-10)</xs:documentation>
+            <xs:documentation>Voto (1-10)</xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:int">
             <xs:minInclusive value="1"/>
