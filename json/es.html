@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>creazione json con javaScript</title>
+        <script language='javascript'>
+            var libri = [
+                {"id": "01",
+                 "linguaggio" : "JavaScript",
+                  "editore" : "Apogeo",
+                  "autore" : "Mario Rossi"
+                },
+                {"id": "02",
+                 "linguaggio" : "PHP",
+                  "editore" : "Zanichelli",
+                  "autore" : "Luigi Bianchi"
+                },
+
+            ];
+            document.write("<h1>Libri di programmazione</h1>");
+            for(x = 0; x<2; x++) {
+                document.write("<h3> + "+libri[x].id+" "+libri[x].editore+" editore");
+                document.write(" Lingua: "+libri[x].linguaggio+ "</h3>");
+                document.write("<p> Autore: "+libri[x].autore+"</p>");
+
+            }
+            document.write("<hr>");
+            document.write(libri[1].linguaggio + "puoi essere usato per creare siti web dinamici.");
+            document.write("scritto da " + libri[1].autore);
+            document.write("<hr/>");
+        </script>
+    </head>
+    <body>
+    </body>
+
+            </html>
