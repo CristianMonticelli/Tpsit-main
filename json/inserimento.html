@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca - Inserimento Libri</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        label {
+            display: block;
+            margin-top: 15px;
+            color: #555;
+            font-weight: bold;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .btn:hover {
+            background-color: #45a049;
+        }
+        
+        .btn-secondary {
+            background-color: #2196F3;
+            margin-top: 10px;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #0b7dda;
+        }
+        
+        .messaggio {
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 4px;
+            text-align: center;
+            display: none;
+        }
+        
+        .successo {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .errore {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <h1>📚 Biblioteca - Inserimento Libri</h1>
+    
+    <div class="form-container">
+        <form id="formLibro">
+            <label for="titolo">Titolo del Libro *</label>
+            <input type="text" id="titolo" name="titolo" required placeholder="Es: Il Signore degli Anelli">
+            
+            <label for="autore">Autore *</label>
+            <input type="text" id="autore" name="autore" required placeholder="Es: J.R.R. Tolkien">
+            
+            <label for="casaEditrice">Casa Editrice *</label>
+            <input type="text" id="casaEditrice" name="casaEditrice" required placeholder="Es: Mondadori">
+            
+            <label for="annoEdizione">Anno di Edizione</label>
+            <input type="number" id="annoEdizione" name="annoEdizione" min="1400" max="2026" placeholder="Es: 2023">
+            
+            <label for="genere">Genere *</label>
+            <select id="genere" name="genere" required>
+                <option value="">-- Seleziona un genere --</option>
+                <option value="narrativa">Narrativa</option>
+                <option value="fantasy">Fantasy</option>
+                <option value="giallo">Giallo</option>
+                <option value="horror">Horror</option>
+                <option value="romantico">Romantico</option>
+                <option value="storico">Storico</option>
+                <option value="scientifico">Scientifico</option>
+                <option value="biografia">Biografia</option>
+            </select>
+            
+            <label for="numeroPagine">Numero Pagine</label>
+            <input type="number" id="numeroPagine" name="numeroPagine" min="1" placeholder="Es: 350">
+            
+            <button type="submit" class="btn">Aggiungi Libro</button>
+            <button type="button" class="btn btn-secondary" onclick="vaiAVisualizza()">
+                Visualizza Biblioteca
+            </button>
+        </form>
+        
+        <div id="messaggio" class="messaggio"></div>
+    </div>
+
+    <script>
+        // Funzione per caricare i dati esistenti dal LocalStorage
+        function caricaBiblioteca() {
+            const bibliotecaJSON = locaSltorage.getItem('biblioteca');
+            if (bibliotecaJSON) {
+                return JSON.parse(bibliotecaJSON);
+            } else {
+                // Se non esiste, crea una struttura vuota
+                return { books: [] };
+            }
+        }
+        
+        // Funzione per salvare i dati nel LocalStorage
+        function salvaBiblioteca(biblioteca) {
+            const bibliotecaJSON = JSON.stringify(biblioteca, null, 2);
+            localStorage.setItem('biblioteca', bibliotecaJSON);
+        }
+        
+        // Funzione per mostrare messaggi
+        function mostraMessaggio(testo, tipo) {
+            const messaggio = document.getElementById('messaggio');
+            messaggio.textContent = testo;
+            messaggio.className = 'messaggio ' + tipo;
+            messaggio.style.display = 'block';
+            
+            setTimeout(() => {
+                messaggio.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Gestione del submit del form
+        document.getElementById('formLibro').addEventListener('submit', function(e) {
+            e.preventDefault(); // Previene il ricaricamento della pagina
+            
+            // Raccolta dati dal form
+            const nuovoLibro = {
+                titolo: document.getElementById('titolo').value.trim(),
+                autore: document.getElementById('autore').value.trim(),
+                casaEditrice: document.getElementById('casaEditrice').value.trim(),
+                annoEdizione: document.getElementById('annoEdizione').value || "Non specificato",
+                genere: document.getElementById('genere').value,
+                numeroPagine: document.getElementById('numeroPagine').value || "Non specificato"
+            };
+            
+            // Carica la biblioteca esistente
+            const biblioteca = caricaBiblioteca();
+            
+            // Aggiunge il nuovo libro
+            biblioteca.books.push(nuovoLibro);
+            
+            // Salva nel LocalStorage
+            salvaBiblioteca(biblioteca);
+            
+            // Mostra messaggio di successo
+            mostraMessaggio('✓ Libro aggiunto con successo!', 'successo');
+            
+            // Reset del form
+            this.reset();
+        });
+        
+        // Funzione per navigare alla pagina di visualizzazione
+        function vaiAVisualizza() {
+            window.location.href = 'visualizza.html';
+        }
+    </script>
+</body>
+</html>

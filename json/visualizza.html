@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca - Visualizzazione</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .pulsanti {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            background-color: #45a049;
+        }
+        
+        .btn-danger {
+            background-color: #f44336;
+        }
+        
+        .btn-danger:hover {
+            background-color: #da190b;
+        }
+        
+        .btn-secondary {
+            background-color: #2196F3;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #0b7dda;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .vuoto {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-style: italic;
+        }
+        
+        .info {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-left: 4px solid #2196F3;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 La Mia Biblioteca</h1>
+        
+        <div class="info">
+            <strong>Totale libri:</strong> <span id="totaleLibri">0</span>
+        </div>
+        
+        <div class="pulsanti">
+            <button class="btn btn-secondary" onclick="vaiAInserimento()">
+                ➕ Aggiungi Nuovo Libro
+            </button>
+            <button class="btn" onclick="esportaJSON()">
+                💾 Scarica JSON
+            </button>
+            <button class="btn btn-danger" onclick="cancellabiblioteca()">
+                🗑️ Cancella Tutto
+            </button>
+        </div>
+        
+        <div id="contenutoTabella"></div>
+    </div>
+
+    <script>
+        // Carica e visualizza la biblioteca all'avvio
+        window.onload = function() {
+            visualizzaBiblioteca();
+        };
+        
+        // Funzione per caricare i dati dal LocalStorage
+        function caricaBiblioteca() {
+            const bibliotecaJSON = localStorage.getItem('biblioteca');
+            if (bibliotecaJSON) {
+                return JSON.parse(bibliotecaJSON);
+            } else {
+                return { books: [] };
+            }
+        }
+        
+        // Funzione per visualizzare i libri in tabella
+        function visualizzaBiblioteca() {
+            const biblioteca = caricaBiblioteca();
+            const contenuto = document.getElementById('contenutoTabella');
+            const totale = document.getElementById('totaleLibri');
+            
+            totale.textContent = biblioteca.books.length;
+            
+            if (biblioteca.books.length === 0) {
+                contenuto.innerHTML = '<div class="vuoto">Nessun libro presente. Aggiungi il primo libro!</div>';
+                return;
+            }
+            
+            // Creazione della tabella
+            let tabella = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Titolo</th>
+                            <th>Autore</th>
+                            <th>Casa Editrice</th>
+                            <th>Anno</th>
+                            <th>Genere</th>
+                            <th>Pagine</th>
+                            <th>Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            biblioteca.books.forEach((libro, index) => {
+                tabella += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td><strong>${libro.titolo}</strong></td>
+                        <td>${libro.autore}</td>
+                        <td>${libro.casaEditrice}</td>
+                        <td>${libro.annoEdizione}</td>
+                        <td>${libro.genere}</td>
+                        <td>${libro.numeroPagine}</td>
+                        <td>
+                            <button class="btn btn-danger" onclick="eliminaLibro(${index})" style="padding: 5px 10px; font-size: 12px;">
+                                Elimina
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tabella += `
+                    </tbody>
+                </table>
+            `;
+            
+            contenuto.innerHTML = tabella;
+        }
+        
+        // Funzione per eliminare un libro
+        function eliminaLibro(index) {
+            if (confirm('Sei sicuro di voler eliminare questo libro?')) {
+                const biblioteca = caricaBiblioteca();
+                biblioteca.books.splice(index, 1);
+                localStorage.setItem('biblioteca', JSON.stringify(biblioteca, null, 2));
+                visualizzaBiblioteca();
+            }
+        }
+        
+        // Funzione per cancellare tutta la biblioteca
+        function cancellabiblioteca() {
+            if (confirm('ATTENZIONE: Vuoi eliminare TUTTI i libri dalla biblioteca?')) {
+                localStorage.removeItem('biblioteca');
+                visualizzaBiblioteca();
+            }
+        }
+        
+        // Funzione per esportare il JSON
+        function esportaJSON() {
+            const biblioteca = caricaBiblioteca();
+            const dataStr = JSON.stringify(biblioteca, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'biblioteca.json';
+            link.click();
+            
+            URL.revokeObjectURL(url);
+        }
+        
+        // Funzione per tornare alla pagina di inserimento
+        function vaiAInserimento() {
+            window.location.href = 'inserimento.html';
+        }
+    </script>
+</body>
+</html>
+
