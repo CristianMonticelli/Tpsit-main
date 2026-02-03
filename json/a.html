@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca - Inserimento Libri</title>
+    <style>
+        input, select, button, label, h1, option {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px 0;
+            color: brown;
+            border-color: #00fff2;
+            border-radius: 40px;
+        }
+    </style>
+</head>
+<body>
+    <h1> Biblioteca - Inserimento Libri</h1>
+    
+    <div>
+        <form id="formLibro">
+            <div>
+                <label for="titolo">Titolo del Libro *</label>
+                <input type="text" id="titolo" name="titolo" required placeholder="Es: Il Signore degli Anelli">
+            </div>
+            <div> 
+                <label for="autore">Autore *</label>
+                <input type="text" id="autore" name="autore" required placeholder="Es: J.R.R. Tolkien">
+            </div>
+            <div>     
+                <label for="casaEditrice">Casa Editrice *</label>
+                <input type="text" id="casaEditrice" name="casaEditrice" required placeholder="Es: Mondadori">
+            </div>
+            <div>     
+                <label for="annoEdizione">Anno di Edizione</label>
+                <input type="number" id="annoEdizione" name="annoEdizione" min="1400" max="2026" placeholder="Es: 2023">
+            </div>
+            <div>     
+                <label for="genere">Genere *</label>
+                <select id="genere" name="genere" required >
+                    <option value="">-- Seleziona un genere --</option>
+                    <option value="narrativa">Narrativa</option>
+                    <option value="fantasy">Fantasy</option>
+                    <option value="giallo">Giallo</option>
+                    <option value="horror">Horror</option>
+                    <option value="romantico">Romantico</option>
+                    <option value="storico">Storico</option>
+                    <option value="scientifico">Scientifico</option>
+                    <option value="biografia">Biografia</option>
+                </select>
+            </div>
+            <div>     
+                <label for="numeroPagine">Numero Pagine</label>
+                <input type="number" id="numeroPagine" name="numeroPagine" min="1" placeholder="Es: 350">
+            </div>
+            <div>     
+                <label for="file">File</label>
+                <input type="file" id="file" name="file">
+            </div>
+            <div>     
+                <button type="submit" class="btn">Aggiungi Libro</button>
+            </div>
+        </form>
+        
+        <div id="messaggio" class="messaggio"></div>
+    </div>
+
+    
+</body>
+</html>
