@@ -139,7 +139,7 @@
     <script>
         // Funzione per caricare i dati esistenti dal LocalStorage
         function caricaBiblioteca() {
-            const bibliotecaJSON = locaSltorage.getItem('biblioteca');
+            const bibliotecaJSON = localStorage.getItem('biblioteca');
             if (bibliotecaJSON) {
                 return JSON.parse(bibliotecaJSON);
             } else {
