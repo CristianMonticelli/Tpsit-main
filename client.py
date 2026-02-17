@@ -1,14 +1,14 @@
 import socket
 
 def main():
-    # Creazione del socket TCP
+    # Creazione del socket TCP socket.AF_INET = IPv4, socket.SOCK_STREAM = TCP
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     server_name = "localhost"
     server_port = 6789
 
     try:
-        #  Connessione al server
+        # Connessione al server
         client_socket.connect((server_name, server_port)) #java new Socket(nomeServer, portaServer);
         print("CLIENT connesso al server")
 
