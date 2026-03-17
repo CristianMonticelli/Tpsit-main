@@ -59,3 +59,4 @@ if __name__ == '__main__':
     except Exception as e:
         print(f"Errore in avvio server: {e}")
         srv.stop()
+        
