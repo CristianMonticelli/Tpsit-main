@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biblioteca - Inserimento Libri</title>
+    <title>Registro</title>
     <style>
         body{font-family:Arial,sans-serif;background:#fff;color:#000;margin:8px;padding:8px}
         h1{font-size:1.2rem;text-align:center;margin:6px 0}
         .form-container{padding:6px;border:1px solid #fff;background:#fff}
-        label,input,select,button,textarea{display:block;width:100%;margin:6px 0;padding:6px;border:1px solid #ccc;background:#fff;color:#000;font-size:14px}
+        label,input,select,button,textarea{display:block;width:100%;margin:6px 0;padding:6px;border:1px solid #ccc;background:#eeeeee;color:#000;font-size:14px}
         input,select{box-sizing:border-box}
         button{background:#eee;border:1px solid #ddd;color:#000;cursor:pointer}
         .btn,.btn-secondary{padding:6px}
@@ -17,101 +17,141 @@
         th,td{padding:6px;border:1px solid #fff;text-align:left}
         .vuoto{padding:12px;text-align:center;color:#000}
         .info{padding:6px;background:#fff;border-left:3px solid #fff}
+        .errore-campo{border:2px solid red !important}
+        .error-list{color:red;margin-top:8px;background:#ffecec;padding:8px;border:1px solid #ffbcbc}
     </style>
 </head>
 <body>
-    <h1>📚 Biblioteca - Inserimento Libri</h1>
+    <h1>📚 REGISTRAZIONE STUDENTI</h1>
     
     <div class="form-container">
-        <form id="formLibro">
-            <label for="titolo">Titolo del Libro *</label>
-            <input type="text" id="titolo" name="titolo" required placeholder="Es: Il Signore degli Anelli">
+        <form id="formStudente" novalidate>
+            <label for="nome">nome</label>
+            <input type="text" id="nome" name="nome" required placeholder="Es: Mario">
             
-            <label for="autore">Autore *</label>
-            <input type="text" id="autore" name="autore" required placeholder="Es: J.R.R. Tolkien">
+            <label for="cognome">cognome</label>
+            <input type="text" id="cognome" name="cognome" required placeholder="Es: Rossi">
             
-            <label for="casaEditrice">Casa Editrice *</label>
-            <input type="text" id="casaEditrice" name="casaEditrice" required placeholder="Es: Mondadori">
+            <label for="data_nascita">data di nascita</label>
+            <input type="date" id="data_nascita" name="data_nascita" required>
             
-            <label for="annoEdizione">Anno di Edizione</label>
-            <input type="number" id="annoEdizione" name="annoEdizione" min="-500" max="2026" placeholder="Es: 2023">
+            <label for="codice_fiscale">codice fiscale</label>
+            <input type="text" id="codice_fiscale" name="codice_fiscale" placeholder="Es: RSSMRA85M01H501U" maxlength="16">
             
-            <label for="genere">Genere *</label>
-            <select id="genere" name="genere" required >
-                <option value="">-- Seleziona un genere --</option>
-                <option value="narrativa">Narrativa</option>
-                <option value="fantasy">Fantasy</option>
-                <option value="giallo">Giallo</option>
-                <option value="horror">Horror</option>
-                <option value="romantico">Romantico</option>
-                <option value="storico">Storico</option>
-                <option value="scientifico">Scientifico</option>
-                <option value="biografia">Biografia</option>
+            <label for="classe">classe</label>
+            <select id="classe" name="classe" required >
+                <option value="">-- Seleziona una classe --</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+
+            <label for="sezione">sezione</label>
+            <select id="sezione" name="sezione" required >
+                <option value="">-- Seleziona una sezione --</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
             </select>
             
-            <label for="numeroPagine">Numero Pagine</label>
-            <input type="number" id="numeroPagine" name="numeroPagine" min="1" placeholder="Es: 350">
+            <label for="ripetente">ripetente</label>
+            <input type="checkbox" id="ripetente" name="ripetente">
             
-            <button type="submit" class="btn">Aggiungi Libro</button>
-            <button type="button" class="btn btn-secondary" onclick="vaiAVisualizza()">
-                Visualizza Biblioteca
-            </button>
+            <label for="anni_ripetuti">anni ripetuti</label>
+            <input type="number" id="anni_ripetuti" name="anni_ripetuti" min="0" value="0">
+
+            <label for="uscita">uscita </label>
+            <select id="uscita" name="uscita" required >
+                <option value="">-- Seleziona una uscita --</option>
+                <option value="lavoro">lavoro</option>
+                <option value="università">università</option>
+                <option value="altro">altro</option>
+            </select>
+
+            <button type="submit" class="btn">INVIA REGISTRAZIONE</button>
+            <button type="button" class="btn btn-secondary" onclick="vaiAVisualizza()">Vai a Visualizza</button>
+
+            <div id="errori" class="error-list" aria-live="polite" style="display:none"></div>
         </form>
         
     </div>
 
     <script>
-        // Funzione per caricare i dati esistenti dal LocalStorage
-        function caricaBiblioteca() {
-            const bibliotecaJSON = localStorage.getItem('biblioteca');
-            if (bibliotecaJSON) {
-                return JSON.parse(bibliotecaJSON);
-            } else {
-                // Se non esiste, crea una struttura vuota
-                return { books: [] };
-            }
+        // Carica/salva registro (uso key 'registro' per compatibilità con visualizza.html)
+        function caricaRegistro() {
+            const registroJSON = localStorage.getItem('registro');
+            return registroJSON ? JSON.parse(registroJSON) : { books: [] };
         }
-        
-        // Funzione per salvare i dati nel LocalStorage
-        function salvaBiblioteca(biblioteca) {
-            const bibliotecaJSON = JSON.stringify(biblioteca, null, 2);
-            localStorage.setItem('biblioteca', bibliotecaJSON);
+        function salvaRegistro(registro) {
+            localStorage.setItem('registro', JSON.stringify(registro, null, 2));
         }
-        
 
-        
-        // Gestione del submit del form
-        document.getElementById('formLibro').addEventListener('submit', function(e) {
-            e.preventDefault(); // Previene il ricaricamento della pagina
+        // Validazioni compatibili con i campi richiesti
+        function validaCampi() {
+            const errors = [];
+            const campos = {
+                nome: document.getElementById('nome'),
+                cognome: document.getElementById('cognome'),
+                data_nascita: document.getElementById('data_nascita'),
+                codice_fiscale: document.getElementById('codice_fiscale'),
             
             // Raccolta dati dal form
-            const nuovoLibro = {
-                titolo: document.getElementById('titolo').value.trim(),
-                autore: document.getElementById('autore').value.trim(),
-                casaEditrice: document.getElementById('casaEditrice').value.trim(),
-                annoEdizione: document.getElementById('annoEdizione').value || "Non specificato",
-                genere: document.getElementById('genere').value,
-                numeroPagine: document.getElementById('numeroPagine').value || "Non specificato"
+            const nuovoStudente = {
+                nome: document.getElementById('nome').value.trim(),
+                cognome: document.getElementById('cognome').value.trim(),
+                data_nascita: document.getElementById('data_nascita').value.trim(),
+                codice_fiscale: document.getElementById('codice_fiscale').value.trim(),
+                classe: document.getElementById('classe').value.trim(),
+                sezione: document.getElementById('sezione').value.trim(),
+                ripetente: document.getElementById('ripetente').value.trim(),
+                anni_ripetuti: document.getElementById('anni_ripetuti').value.trim(),
+                uscita: document.getElementById('uscita').value.trim()
+
             };
             
-            // Carica la biblioteca esistente
-            const biblioteca = caricaBiblioteca();
+            // Carica la Registro esistente
+            const Registro = caricaRegistro();
             
             // Aggiunge il nuovo libro
-            biblioteca.books.push(nuovoLibro);
+            Registro.books.push(nuovoStudente);
             
             // Salva nel LocalStorage
-            salvaBiblioteca(biblioteca);
+            salvaRegistro(Registro);
             
             
             // Reset del form
             this.reset();
+        });
+      
+
+        const campi = [nome, cognome, data_nascita,codice_fiscale,classe,sezione,ripetente,anni_ripetuti,uscita];
+
+        campi.forEach(elemento => {
+        elemento.style.border = "2px solid blue";
+
+
+
+        elemento.addEventListener("focus", () => {
+            elemento.style.borderColor = "red";
+        });
+
+
+        });
+
+
+        document.getElementById("StudenteForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        alert("Libro salvato con successo!");
         });
         
         // Funzione per navigare alla pagina di visualizzazione
         function vaiAVisualizza() {
             window.location.href = 'visualizza.html';
         }
+
     </script>
 </body>
 </html>

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <title>Biblioteca - Aggiungi libro</title>
+</head>
+<body>
+  <h1>Aggiungi libro</h1>
+
+  <form id="bookForm">
+    <label>
+      Titolo:
+      <input name="title" type="text" required id="title">
+    </label>
+    <br><br>
+
+    <label>
+      Genere:
+      <select name="genre" id="genre">
+        <option value="Fantasy">Fantasy</option>
+        <option value="Avventura">Avventura</option>
+        <option value="Romanzo">Romanzo</option>
+      </select>
+    </label>
+    <br><br>
+
+    <label>
+      Autore:
+      <input name="author" type="text" required id="author">
+    </label>
+    <br><br>
+
+    <button type="submit">Salva libro</button>
+  </form>
+
+  <script>
+
+    const title = document.getElementById("title");
+    const genre = document.getElementById("genre");
+    const author = document.getElementById("author");
+
+
+    const campi = [title, genre, author];
+
+    campi.forEach(elemento => {
+      elemento.style.border = "2px solid blue";
+
+
+
+      elemento.addEventListener("focus", () => {
+        elemento.style.borderColor = "red";
+      });
+
+
+      });
+
+
+    document.getElementById("bookForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      alert("Libro salvato con successo!");
+    });
+  </script>
+</body>
+</html>
+

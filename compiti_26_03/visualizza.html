@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studenti - Visualizzazione</title>
+    <style>
+        body{font-family:Arial,sans-serif;background:#fff;color:#000;margin:8px;padding:8px}
+        h1{font-size:1.2rem;text-align:center;margin:6px 0}
+        .container{padding:6px;background:#fff;border:1px solid #fff}
+        .pulsanti{text-align:center;margin-bottom:8px}
+        .btn{display:inline-block;padding:6px 8px;margin:4px;border:1px solid #ddd;background:#eee;color:#000;cursor:pointer}
+        table{width:100%;border-collapse:collapse;margin-top:8px}
+        th,td{padding:6px;border:1px solid #fff;text-align:left}
+        th{background:#fff}
+        .vuoto{padding:12px;text-align:center;color:#000}
+        .info{padding:6px;background:#fff;border-left:3px solid #fff}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Studenti</h1>
+        
+        <div class="info">
+            <strong>Totale Studenti:</strong> <span id="totaleStudenti">0</span>
+        </div>
+        
+        <div class="pulsanti">
+            <button class="btn btn-secondary" onclick="vaiAInserimento()">
+                ➕ Aggiungi Nuovo Studente
+            </button>
+            <button class="btn" onclick="esportaJSON()">
+                💾 Scarica JSON
+            </button>
+            <button class="btn btn-danger" onclick="cancellaregistro()">
+                🗑️ Cancella Tutto
+            </button>
+        </div>
+        
+        <div id="contenutoTabella"></div>
+    </div>
+
+    <script>
+        // Carica e visualizza la registro all'avvio
+        window.onload = function() {
+            visualizzaregistro();
+        };
+        
+        // Funzione per caricare i dati dal LocalStorage
+        function caricaregistro() {
+            const registroJSON = localStorage.getItem('registro');
+            if (registroJSON) {
+                return JSON.parse(registroJSON);
+            } else {
+                return { books: [] };
+            }
+        }
+        
+        // Funzione per visualizzare i libri in tabella
+        function visualizzaregistro() {
+            const registro = caricaregistro();
+            const contenuto = document.getElementById('contenutoTabella');
+            const totale = document.getElementById('totaleStudenti');
+            
+            totale.textContent = registro.books.length;
+            
+            if (registro.books.length === 0) {
+                contenuto.innerHTML = '<div class="vuoto">Nessun Studente presente. Aggiungi il primo Studente!</div>';
+                return;
+            }
+            
+            // Creazione della tabella
+            let tabella = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>nome</th>
+                            <th>cognome</th>
+                            <th>data_nascita</th>
+                            <th>codice_fiscale</th>
+                            <th>classe</th>
+                            <th>sezione</th>
+                            <th>ripetente</th>
+                            <th>anni_ripetuti</th>
+                            <th>uscita</th>
+                            <th>Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            registro.books.forEach((Studente, index) => {
+                tabella += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td><strong>${Studente.nome}</strong></td>
+                        <td>${Studente.cognome}</td>
+                        <td>${Studente.data_nascita}</td>
+                        <td>${Studente.codice_fiscale}</td>
+                        <td>${Studente.classe}</td>
+                        <td>${Studente.sezione}</td>
+                        <td>${Studente.ripetente}</td>
+                        <td>${Studente.anni_ripetuti}</td>
+                        <td>${Studente.uscita}</td>
+                        <td>
+                            <button class="btn btn-danger" onclick="eliminaStudente(${index})" style="padding: 5px 10px; font-size: 12px;">
+                                Elimina
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tabella += `
+                    </tbody>
+                </table>
+            `;
+            
+            contenuto.innerHTML = tabella;
+        }
+        
+        // Funzione per eliminare un Studente
+        function eliminaStudente(index) {
+            if (confirm('Sei sicuro di voler eliminare questo Studente?')) {
+                const registro = caricaregistro();
+                registro.books.splice(index, 1);
+                localStorage.setItem('registro', JSON.stringify(registro, null, 2));
+                visualizzaregistro();
+                
+            }
+        }
+        
+        // Funzione per cancellare tutta la registro
+        function cancellaregistro() {
+            if (confirm('ATTENZIONE: Vuoi eliminare TUTTI i libri dalla registro?')) {
+                localStorage.removeItem('registro');
+                visualizzaregistro();
+            }
+        }
+        
+        // Funzione per esportare il JSON
+        function esportaJSON() {
+            const registro = caricaregistro();
+            const dataStr = JSON.stringify(registro, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'registro.json';
+            link.click();
+            
+            URL.revokeObjectURL(url);
+        }
+        
+        // Funzione per tornare alla pagina di inserimento
+        function vaiAInserimento() {
+            window.location.href = 'inserimento.html';
+        }
+    </script>
+</body>
+</html>
+
