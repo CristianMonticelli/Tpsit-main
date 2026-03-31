@@ -61,8 +61,10 @@
             <label for="ripetente">ripetente</label>
             <input type="checkbox" id="ripetente" name="ripetente">
             
-            <label for="anni_ripetuti">anni ripetuti <span class="small">(se ripetente)</span></label>
-            <input type="number" id="anni_ripetuti" name="anni_ripetuti" min="0" value="0">
+            <div id="anni_container" style="display:none">
+                <label for="anni_ripetuti">anni ripetuti <span class="small">(se ripetente)</span></label>
+                <input type="number" id="anni_ripetuti" name="anni_ripetuti" min="0" value="0">
+            </div>
 
             <label for="uscita">uscita</label>
             <select id="uscita" name="uscita" required>
@@ -77,144 +79,192 @@
 
             <!-- div degli errori posizionato dopo il submit (richiesta della consegna) -->
             <div id="errori" class="error-list" aria-live="polite" style="display:none"></div>
-        </form>
-    </div>
-
-    <script>
-        // compatibilità con visualizza.html: key 'registro' con array 'books'
-        function caricaRegistro() {
-            const registroJSON = localStorage.getItem('registro');
-            return registroJSON ? JSON.parse(registroJSON) : { books: [] };
-        }
-        function salvaRegistro(registro) {
-            localStorage.setItem('registro', JSON.stringify(registro, null, 2));
-        }
-
-        // rimuove bordo rosso quando utente modifica il campo
-        ['nome','cognome','data_nascita','codice_fiscale','classe','sezione','anni_ripetuti','uscita','ripetente']
-            .forEach(id => {
-                const el = document.getElementById(id);
-                if (!el) return;
-                el.addEventListener('input', () => el.classList.remove('errore-campo'));
-                el.addEventListener('change', () => el.classList.remove('errore-campo'));
-            });
-
-        function validaCampi() {
-            const errors = [];
-            const campos = {
-                nome: document.getElementById('nome'),
-                cognome: document.getElementById('cognome'),
-                data_nascita: document.getElementById('data_nascita'),
-                codice_fiscale: document.getElementById('codice_fiscale'),
-                classe: document.getElementById('classe'),
-                sezione: document.getElementById('sezione'),
-                ripetente: document.getElementById('ripetente'),
-                anni_ripetuti: document.getElementById('anni_ripetuti'),
-                uscita: document.getElementById('uscita')
-            };
-
-            // reset stili
-            Object.values(campos).forEach(c => c && c.classList && c.classList.remove('errore-campo'));
-
-            // nome, cognome: required, almeno 2 caratteri
-            if (!campos.nome.value.trim() || campos.nome.value.trim().length < 2) {
-                errors.push({ field: 'nome', message: 'Nome obbligatorio (min 2 caratteri).' });
+        <script>
+            // compatibilità con visualizza.html: key 'registro' con array 'books'
+            function caricaRegistro() {
+                const registroJSON = localStorage.getItem('registro');
+                return registroJSON ? JSON.parse(registroJSON) : { books: [] };
             }
-            if (!campos.cognome.value.trim() || campos.cognome.value.trim().length < 2) {
-                errors.push({ field: 'cognome', message: 'Cognome obbligatorio (min 2 caratteri).' });
+            function salvaRegistro(registro) {
+                localStorage.setItem('registro', JSON.stringify(registro, null, 2));
             }
 
-            // data_nascita: required e nel passato
-            if (!campos.data_nascita.value) {
-                errors.push({ field: 'data_nascita', message: 'Data di nascita obbligatoria.' });
-            } else {
-                const d = new Date(campos.data_nascita.value + 'T00:00:00');
-                const oggi = new Date();
-                if (isNaN(d.getTime()) || d >= oggi) {
-                    errors.push({ field: 'data_nascita', message: 'Data di nascita non valida (deve essere nel passato).' });
+            // utility: toggle visibilità anni ripetuti
+            const ripetenteEl = document.getElementById('ripetente');
+            const anniContainer = document.getElementById('anni_container');
+            const anniInput = document.getElementById('anni_ripetuti');
+
+            function aggiornaVisibilitaAnni() {
+                if (ripetenteEl.checked) {
+                    anniContainer.style.display = '';
+                    anniInput.setAttribute('required', 'required');
+                } else {
+                    anniContainer.style.display = 'none';
+                    anniInput.removeAttribute('required');
+                    anniInput.value = '0';
                 }
             }
 
-            // codice fiscale: richiesto e formato semplice (alfanumerico, 16 caratteri)
-            const cf = campos.codice_fiscale.value.trim().toUpperCase();
-            const cfRegex = /^[A-Z0-9]{16}$/;
-            if (!cfRegex.test(cf)) {
-                errors.push({ field: 'codice_fiscale', message: 'Codice fiscale obbligatorio e deve essere 16 caratteri alfanumerici.' });
+            ripetenteEl.addEventListener('change', aggiornaVisibilitaAnni);
+            // inizializza stato
+            aggiornaVisibilitaAnni();
+
+            // rimuove bordo rosso quando utente modifica il campo
+            ['nome','cognome','data_nascita','codice_fiscale','classe','sezione','anni_ripetuti','uscita','ripetente']
+                .forEach(id => {
+                    const el = document.getElementById(id);
+                    if (!el) return;
+                    el.addEventListener('input', () => el.classList.remove('errore-campo'));
+                    el.addEventListener('change', () => el.classList.remove('errore-campo'));
+                });
+
+            // validatori
+            function validaNomeCognome(s) {
+                const v = s.trim();
+                // almeno 2 caratteri, solo lettere (compresi accenti), spazi, apostrofo e trattino
+                return /^[A-Za-zÀ-ÖØ-öø-ÿ' -]{2,}$/.test(v);
             }
 
-            // classe / sezione / uscita: required
-            if (!campos.classe.value) {
-                errors.push({ field: 'classe', message: 'Seleziona una classe.' });
-            }
-            if (!campos.sezione.value) {
-                errors.push({ field: 'sezione', message: 'Seleziona una sezione.' });
-            }
-            if (!campos.uscita.value) {
-                errors.push({ field: 'uscita', message: 'Seleziona una uscita.' });
+            function calcolaEta(dob) {
+                // calcolo semplificato: differenza in anni usando approssimazione solida
+                const diff = Date.now() - dob.getTime();
+                const anni = Math.floor(diff / (365.25 * 24 * 60 * 60 * 1000));
+                return anni;
             }
 
-            // ripetente -> anni_ripetuti obbligatorio e >0
-            if (campos.ripetente.checked) {
-                const anni = parseInt(campos.anni_ripetuti.value, 10);
-                if (isNaN(anni) || anni <= 0) {
-                    errors.push({ field: 'anni_ripetuti', message: 'Se ripetente, inserire anni ripetuti maggiori di 0.' });
+            // controllo codice fiscale (versione semplificata: solo formato 16 caratteri alfanumerici)
+            function validaCodiceFiscale(cf) {
+                if (!cf) return false;
+                const c = cf.toUpperCase().trim();
+                const basic = /^[A-Z0-9]{16}$/;
+                return basic.test(c);
+            }
+
+            function validaCampi() {
+                const errors = [];
+                const campos = {
+                    nome: document.getElementById('nome'),
+                    cognome: document.getElementById('cognome'),
+                    data_nascita: document.getElementById('data_nascita'),
+                    codice_fiscale: document.getElementById('codice_fiscale'),
+                    classe: document.getElementById('classe'),
+                    sezione: document.getElementById('sezione'),
+                    ripetente: document.getElementById('ripetente'),
+                    anni_ripetuti: document.getElementById('anni_ripetuti'),
+                    uscita: document.getElementById('uscita')
+                };
+
+                // reset stili
+                Object.values(campos).forEach(c => c && c.classList && c.classList.remove('errore-campo'));
+
+                // nome, cognome: required, almeno 2 caratteri e solo lettere/segni consentiti
+                if (!validaNomeCognome(campos.nome.value || '')) {
+                    errors.push({ field: 'nome', message: 'Nome obbligatorio (min 2 lettere, solo lettere/spazi/\'-).' });
                 }
+                if (!validaNomeCognome(campos.cognome.value || '')) {
+                    errors.push({ field: 'cognome', message: 'Cognome obbligatorio (min 2 lettere, solo lettere/spazi/\'-).' });
+                }
+
+                // data_nascita: required, nel passato e maggiorenne (>= 18 anni)
+                if (!campos.data_nascita.value) {
+                    errors.push({ field: 'data_nascita', message: 'Data di nascita obbligatoria.' });
+                } else {
+                    const d = new Date(campos.data_nascita.value + 'T00:00:00');
+                    const oggi = new Date();
+                    if (isNaN(d.getTime()) || d >= oggi) {
+                        errors.push({ field: 'data_nascita', message: 'Data di nascita non valida (deve essere nel passato).' });
+                    } else {
+                        const eta = calcolaEta(d);
+                        if (eta < 18) {
+                            errors.push({ field: 'data_nascita', message: 'Lo studente deve essere maggiorenne (>= 18 anni).' });
+                        }
+                    }
+                }
+
+                // codice fiscale: formato + controllo
+                const cf = (campos.codice_fiscale.value || '').trim().toUpperCase();
+                if (!validaCodiceFiscale(cf)) {
+                    errors.push({ field: 'codice_fiscale', message: 'Codice fiscale non valido. Controlla formato e carattere di controllo.' });
+                }
+
+                // classe / sezione / uscita: required
+                if (!campos.classe.value) {
+                    errors.push({ field: 'classe', message: 'Seleziona una classe.' });
+                }
+                if (!campos.sezione.value) {
+                    errors.push({ field: 'sezione', message: 'Seleziona una sezione.' });
+                }
+                if (!campos.uscita.value) {
+                    errors.push({ field: 'uscita', message: 'Seleziona una uscita.' });
+                }
+
+                // ripetente -> anni_ripetuti obbligatorio e >0
+                if (campos.ripetente.checked) {
+                    const anni = parseInt(campos.anni_ripetuti.value, 10);
+                    if (isNaN(anni) || anni <= 0) {
+                        errors.push({ field: 'anni_ripetuti', message: 'Se ripetente, inserire anni ripetuti maggiori di 0.' });
+                    }
+                }
+
+                // applica bordi rossi ai campi invalidi
+                errors.forEach(err => {
+                    const el = document.getElementById(err.field);
+                    if (el) el.classList.add('errore-campo');
+                });
+
+                return errors;
             }
 
-            // applica bordi rossi ai campi invalidi
-            errors.forEach(err => {
-                const el = document.getElementById(err.field);
-                if (el) el.classList.add('errore-campo');
+            document.getElementById('formStudente').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const errorDiv = document.getElementById('errori');
+                const errors = validaCampi();
+
+                if (errors.length > 0) {
+                    errorDiv.style.display = 'block';
+                    errorDiv.innerHTML = '<strong>Correggi i seguenti errori:</strong><ul>' +
+                        errors.map(err => `<li><strong>${err.field}</strong>: ${err.message}</li>`).join('') +
+                        '</ul>';
+                    const primo = document.getElementById(errors[0].field);
+                    if (primo) primo.focus();
+                    return;
+                }
+
+                // costruisci oggetto studente e salva
+                const studente = {
+                    nome: document.getElementById('nome').value.trim(),
+                    cognome: document.getElementById('cognome').value.trim(),
+                    data_nascita: document.getElementById('data_nascita').value,
+                    codice_fiscale: document.getElementById('codice_fiscale').value.trim().toUpperCase(),
+                    classe: document.getElementById('classe').value,
+                    sezione: document.getElementById('sezione').value,
+                    ripetente: document.getElementById('ripetente').checked,
+                    anni_ripetuti: parseInt(document.getElementById('anni_ripetuti').value, 10) || 0,
+                    uscita: document.getElementById('uscita').value
+                };
+
+                const registro = caricaRegistro();
+                registro.books.push(studente);
+                salvaRegistro(registro);
+
+                // salvo l'ultimo studente per la pagina risultato
+                sessionStorage.setItem('ultimoStudente', JSON.stringify(studente, null, 2));
+
+                errorDiv.style.display = 'none';
+                this.reset();
+                // assicurati di aggiornare visibilità dopo reset
+                aggiornaVisibilitaAnni();
+
+                // redirect a pagina risultato che mostra il JSON
+                window.location.href = 'risultato.html';
             });
 
-            return errors;
-        }
-
-        document.getElementById('formStudente').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const errorDiv = document.getElementById('errori');
-            const errors = validaCampi();
-
-            if (errors.length > 0) {
-                errorDiv.style.display = 'block';
-                errorDiv.innerHTML = '<strong>Correggi i seguenti errori:</strong><ul>' +
-                    errors.map(err => `<li><strong>${err.field}</strong>: ${err.message}</li>`).join('') +
-                    '</ul>';
-                const primo = document.getElementById(errors[0].field);
-                if (primo) primo.focus();
-                return;
+            function vaiAVisualizza() {
+                window.location.href = 'visualizza.html';
             }
-
-            // costruisci oggetto studente e salva
-            const studente = {
-                nome: document.getElementById('nome').value.trim(),
-                cognome: document.getElementById('cognome').value.trim(),
-                data_nascita: document.getElementById('data_nascita').value,
-                codice_fiscale: document.getElementById('codice_fiscale').value.trim().toUpperCase(),
-                classe: document.getElementById('classe').value,
-                sezione: document.getElementById('sezione').value,
-                ripetente: document.getElementById('ripetente').checked,
-                anni_ripetuti: parseInt(document.getElementById('anni_ripetuti').value, 10) || 0,
-                uscita: document.getElementById('uscita').value
-            };
-
-            const registro = caricaRegistro();
-            registro.books.push(studente);
-            salvaRegistro(registro);
-
-            // salvo l'ultimo studente per la pagina risultato
-            sessionStorage.setItem('ultimoStudente', JSON.stringify(studente, null, 2));
-
-            errorDiv.style.display = 'none';
-            this.reset();
-
-            // redirect a pagina risultato che mostra il JSON
-            window.location.href = 'risultato.html';
-        });
-
-        function vaiAVisualizza() {
-            window.location.href = 'visualizza.html';
-        }
+        </script>
+                
+   
     </script>
 </body>
 </html>
