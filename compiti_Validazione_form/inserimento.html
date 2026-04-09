@@ -80,10 +80,10 @@
             <!-- div degli errori posizionato dopo il submit (richiesta della consegna) -->
             <div id="errori" class="error-list" aria-live="polite" style="display:none"></div>
         <script>
-            // compatibilità con visualizza.html: key 'registro' con array 'books'
+            // compatibilità con visualizza.html: key 'registro' con array 'students '
             function caricaRegistro() {
                 const registroJSON = localStorage.getItem('registro');
-                return registroJSON ? JSON.parse(registroJSON) : { books: [] };
+                return registroJSON ? JSON.parse(registroJSON) : { students : [] };
             }
             function salvaRegistro(registro) {
                 localStorage.setItem('registro', JSON.stringify(registro, null, 2));
@@ -244,7 +244,7 @@
                 };
 
                 const registro = caricaRegistro();
-                registro.books.push(studente);
+                registro.students .push(studente);
                 salvaRegistro(registro);
 
                 // salvo l'ultimo studente per la pagina risultato

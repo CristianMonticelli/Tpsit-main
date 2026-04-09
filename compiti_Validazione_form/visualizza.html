@@ -52,19 +52,19 @@
             if (registroJSON) {
                 return JSON.parse(registroJSON);
             } else {
-                return { books: [] };
+                return { students: [] };
             }
         }
         
-        // Funzione per visualizzare i libri in tabella
+        // Funzione per visualizzare i studenti in tabella
         function visualizzaregistro() {
             const registro = caricaregistro();
             const contenuto = document.getElementById('contenutoTabella');
             const totale = document.getElementById('totaleStudenti');
             
-            totale.textContent = registro.books.length;
+            totale.textContent = registro.students.length;
             
-            if (registro.books.length === 0) {
+            if (registro.students.length === 0) {
                 contenuto.innerHTML = '<div class="vuoto">Nessun Studente presente. Aggiungi il primo Studente!</div>';
                 return;
             }
@@ -90,7 +90,7 @@
                     <tbody>
             `;
             
-            registro.books.forEach((Studente, index) => {
+            registro.students.forEach((Studente, index) => {
                 tabella += `
                     <tr>
                         <td>${index + 1}</td>
@@ -124,7 +124,7 @@
         function eliminaStudente(index) {
             if (confirm('Sei sicuro di voler eliminare questo Studente?')) {
                 const registro = caricaregistro();
-                registro.books.splice(index, 1);
+                registro.students.splice(index, 1);
                 localStorage.setItem('registro', JSON.stringify(registro, null, 2));
                 visualizzaregistro();
                 
@@ -133,7 +133,7 @@
         
         // Funzione per cancellare tutta la registro
         function cancellaregistro() {
-            if (confirm('ATTENZIONE: Vuoi eliminare TUTTI i libri dalla registro?')) {
+            if (confirm('ATTENZIONE: Vuoi eliminare TUTTI i studenti dalla registro?')) {
                 localStorage.removeItem('registro');
                 visualizzaregistro();
             }
