@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<title>Documento 4</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            color: rgb(255, 0, 234); 
+            margin: 20px;
+        }
+        h2 { 
+            color: rgb(255, 0, 234); 
+        }
+    </style>
+</head>
+<body>
+    <h2>Documento 4 - Contenuto Dinamico</h2>
+    <p>Questo è un esempio semplice di HTML caricato tramite AJAX dal file <em>documento1.html</em>.</p>
+    <p>Funziona perfettamente con il loader in <strong>ajax.html</strong>!</p>
+    <ul>
+        <li>Elemento elenco 1</li>
+        <li>Elemento elenco 2</li>
+        <li>Elemento elenco 3</li>
+    </ul>
+    <hr>
+    <small>Caricato dinamicamente il: <span id="timestamp"></span></small>
+    <script>
+        document.getElementById('timestamp').textContent = new Date().toLocaleString('it-IT');
+    </script>
+</body>
+</html>
