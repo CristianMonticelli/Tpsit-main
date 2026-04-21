@@ -1,0 +1,76 @@
+<HTML>
+    <HEAD>
+        <STYLE>
+            div.box{
+                background-color: azure;
+                width: 350px;
+                height: 400px;
+                overflow: auto;
+            }
+        </STYLE>
+
+    <script type="text/javascript">
+        function mostra(str){
+            if (str.lenght == 0){
+                document.getElementById("elenco").innerHTML="";
+                return;
+            }
+            if (window.XMLHttpRequest){
+                ajax = new XMLHttpRequest();
+
+            }
+            else{
+                ajax=new ActiveXObject("Microsoft.XMLHttp");
+            }
+        }
+
+ajax.onreadystatechange-function(){
+
+
+if (ajax.readyState--4 && ajax.status--200){
+
+
+document.getElementById("elenco").innerHTML = ajax.responseText; 
+
+
+
+
+
+
+
+var tmp = new Array() 
+
+
+var stringa = ajax.responseText; 
+tmp =stringa.split("<BR>");
+conta= 0;
+posti= [];
+for (i=0; i < tmp.length; i++) {
+
+posti[conta] = tmp[i].split(",");
+conta++;
+
+}
+
+}
+
+ajax.open("GET","elabora.php?stringa"+str,true);
+ajax.send();
+
+}
+
+    </script>
+    </HEAD>
+
+<BODY>
+
+<H2>Selezione comuni in base alle iniziali</h2>
+
+<P><B>Localita' da cercare:</B></P>
+
+<FORM Nome: <input type="text" onkeyup="mostra (this.value)"></FORM> 
+<P>Citta' suggerite: <div class="box" id="elenco"></DIV></P>
+
+</BODY>
+
+</HTML>

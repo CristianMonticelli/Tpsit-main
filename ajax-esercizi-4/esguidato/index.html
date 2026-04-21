@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ricerca Località</title>
+</head>
+<body>
+
+<h2>Cerca località</h2>
+
+<input type="text" id="search" placeholder="Scrivi...">
+
+<ul id="risultati"></ul>
+
+<script src="/static/script.js"></script>
+
+</body>
+<script>
+  document.getElementById("search").addEventListener("keyup", function() {
+    let query = this.value;
+
+    fetch("/cerca?q=" + query)
+        .then(response => response.json())
+        .then(data => {
+            let lista = document.getElementById("risultati");
+            lista.innerHTML = "";
+
+            data.forEach(item => {
+                let li = document.createElement("li");
+                li.textContent = item.nome + " (" + item.provincia + ")";
+                lista.appendChild(li);
+            });
+        });
+});
+</script>
+</html>

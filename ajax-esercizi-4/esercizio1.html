@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="it">
+<head>
+    <title>Esercizio 1 AJAX - Mouse Hover</title>
+</head>
+<body>
+    <h1>Esercizio 1: Caricamento asincrono con mouse hover</h1>
+    <p>Sposta il mouse su "Carica Doc1" o "Carica Doc2" per 2 zone distinte.</p>
+    
+    <div style="border:1px solid black; padding:20px; margin:10px;">
+        <span onmouseenter="caricaDoc1()">Carica Doc1</span>
+        <div id="zona1">Zona 1 vuota</div>
+    </div>
+    
+    <div style="border:1px solid black; padding:20px; margin:10px;">
+        <span onmouseenter="caricaDoc2()">Carica Doc2</span>
+        <div id="zona2">Zona 2 vuota</div>
+    </div>
+
+    <script>
+        function caricaDoc1() {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = () => { if (xhr.status === 200) document.getElementById('zona1').innerHTML = xhr.responseText; };
+            xhr.open('GET', 'doc1.html', true);
+            xhr.send();
+        }
+        function caricaDoc2() {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = () => { if (xhr.status === 200) document.getElementById('zona2').innerHTML = xhr.responseText; };
+            xhr.open('GET', 'doc2.html', true);
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
+

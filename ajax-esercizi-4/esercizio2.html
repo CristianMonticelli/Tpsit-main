@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<body>
+inizio documento
+<br/><div id="zona1">zona di visualizzazione di source1.htm</div><br/>
+<br/><div id="zona2">zona di visualizzazione di source2.htm</div><br/>
+<br/><div id="zona3">zona di visualizzazione di source3.htm</div><br/>
+fine documento
+
+<select id="menu" onchange="caricaSelezionato()">
+    <option value="">Seleziona documento</option>
+    <option value="source1.html">source1.htm</option>
+    <option value="source2.html">source2.htm</option>
+    <option value="source3.html">source3.htm</option>
+</select>
+
+<script>
+function caricaSelezionato() {
+    const val = document.getElementById('menu').value;
+    if (!val) return;
+    
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            const num = val.match(/source(\d)/)[1];
+            document.getElementById('zona' + num).innerHTML = xhr.responseText;
+        }
+    };
+    xhr.open('GET', val, true);
+    xhr.send();
+}
+</script>
+</body>
+</html>
+

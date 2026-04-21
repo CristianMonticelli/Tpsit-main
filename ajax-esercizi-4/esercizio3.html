@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="it">
+<head>
+    <title>Esercizio 3 AJAX - 2 Liste Hover</title>
+    <style> .lista { display: inline-block; vertical-align: top; width: 45%; margin: 10px; } .item:hover { background: yellow; cursor: pointer; padding: 5px; } </style>
+</head>
+<body>
+    <h1>Esercizio 3: 8 documenti in 2 zone</h1>
+    
+    <div class="lista">
+        <h3>Lista 1 (Doc A1-A4 → Zona Sinistra)</h3>
+        <div class="item" onmouseenter="carica('a1.html', 'sinistra')">Stringa A1</div>
+        <div class="item" onmouseenter="carica('a2.html', 'sinistra')">Stringa A2</div>
+        <div class="item" onmouseenter="carica('a3.html', 'sinistra')">Stringa A3</div>
+        <div class="item" onmouseenter="carica('a4.html', 'sinistra')">Stringa A4</div>
+    </div>
+    
+    <div class="lista">
+        <h3>Lista 2 (Doc B1-B4 → Zona Destra)</h3>
+        <div class="item" onmouseenter="carica('b1.html', 'destra')">Stringa B1</div>
+        <div class="item" onmouseenter="carica('b2.html', 'destra')">Stringa B2</div>
+        <div class="item" onmouseenter="carica('b3.html', 'destra')">Stringa B3</div>
+        <div class="item" onmouseenter="carica('b4.html', 'destra')">Stringa B4</div>
+    </div>
+    
+    <div style="clear:both;">
+        <div id="zona-sinistra" style="border:1px solid blue; width:45%; float:left; min-height:200px; margin:10px; padding:10px;">Zona Sinistra (Lista 1)</div>
+        <div id="zona-destra" style="border:1px solid red; width:45%; float:right; min-height:200px; margin:10px; padding:10px;">Zona Destra (Lista 2)</div>
+    </div>
+
+    <script>
+        const files = ['a1.html','a2.html','a3.html','a4.html','b1.html','b2.html','b3.html','b4.html'];
+        files.forEach(f => {
+            if (!document.querySelector(`[onmouseenter="carica('${f}', 'sinistra')"]`)) return;
+        });
+        
+        function carica(url, zona) {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    document.getElementById(`zona-${zona}`).innerHTML = xhr.responseText;
+                }
+            };
+            xhr.open('GET', url, true);
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
+

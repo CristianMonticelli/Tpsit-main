@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<body>
+inizio documento
+<hr/><br/><span id="zona1">zona di visualizzazione 1</span><br/>
+<hr/><br/><span id="zona2">zona di visualizzazione 2</span><br/>
+<hr/><br/><span id="zona3">zona di visualizzazione 3</span><br/>
+<hr/>fine documento
+
+<select id="menu4" onchange="caricaIndex()">
+    <option value="">Seleziona index</option>
+    <option value="index1.html">index1.htm</option>
+    <option value="index2.html">index2.htm</option>
+    <option value="index3.html">index3.htm</option>
+    <option value="index4.html">index4.htm</option>
+    <option value="index5.html">index5.htm</option>
+    <option value="index6.html">index6.htm</option>
+</select>
+
+<script>
+let contatore = 0;
+function caricaIndex() {
+    const val = document.getElementById('menu4').value;
+    if (!val) return;
+    contatore++;
+    const num = parseInt(val.match(/index(\d)/)[1]);
+    const xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+        if (xhr.status === 200) {
+            const z = Math.floor((num-1)/2) + 1;
+            document.getElementById('zona' + z).innerHTML = xhr.responseText;
+        }
+    };
+    xhr.open('GET', val, true);
+    xhr.send();
+}
+</script>
+</body>
+</html>
+
