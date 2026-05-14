@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Country Info Service</title>
+</head>
+<body>
+    <h1>Country Info Service</h1>
+
+    <h2>Interroga il servizio</h2>
+    <form method="POST">
+        <label for="iso_code">Paese:</label>
+        <select name="iso_code" id="iso_code">
+            <option value="">-- Seleziona un paese --</option>
+            {% for country in countries %}
+            {% if selected_code == country.sISOCode %}
+            <option value="{{ country.sISOCode }}" selected>
+            {% else %}
+            <option value="{{ country.sISOCode }}">
+            {% endif %}
+                {{ country.sISOCode }} - {{ country.sName }}
+            </option>
+            {% endfor %}
+        </select>
+        <br><br>
+
+        <label>Servizio:</label><br>
+        {% for svc, label in service_labels.items() %}
+        {% if selected_service == svc %}
+        <input type="radio" name="service" value="{{ svc }}" checked>
+        {% else %}
+        <input type="radio" name="service" value="{{ svc }}">
+        {% endif %}
+        {{ label }}<br>
+        {% endfor %}
+        <br>
+
+        <input type="submit" value="Cerca">
+    </form>
+
+    {% if error %}
+    <p><strong>Errore:</strong> {{ error }}</p>
+    {% endif %}
+
+    {% if result is not none %}
+    <hr>
+    <h2>Risultato - {{ service_labels[selected_service] }} per {{ selected_code }}</h2>
+
+    {% if result is mapping %}
+        <table border="1">
+            <tr><th>Campo</th><th>Valore</th></tr>
+            <tr><td>Codice ISO</td><td>{{ result.get("Codice ISO", "") }}</td></tr>
+            <tr><td>Nome</td><td>{{ result.get("Nome", "") }}</td></tr>
+            <tr><td>Capitale</td><td>{{ result.get("Capitale", "") }}</td></tr>
+            <tr><td>Prefisso telefonico</td><td>+{{ result.get("Prefisso telefonico", "") }}</td></tr>
+            <tr><td>Continente</td><td>{{ result.get("Continente", "") }}</td></tr>
+            <tr><td>Valuta (ISO)</td><td>{{ result.get("Valuta (ISO)", "") }}</td></tr>
+            <tr><td>Lingue</td><td>{{ result.get("Lingue", "") }}</td></tr>
+            <tr><td>Bandiera</td><td><img src="{{ result.get("Bandiera", "") }}" alt="Bandiera" height="60"></td></tr>
+        </table>
+    {% else %}
+        {% if result %}
+        <p>{{ result }}</p>
+        {% else %}
+        <p>(nessun dato disponibile)</p>
+        {% endif %}
+    {% endif %}
+    {% endif %}
+</body>
+</html>

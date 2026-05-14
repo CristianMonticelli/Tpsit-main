@@ -19,7 +19,10 @@ def cerca():
     conn = get_db()
     cur = conn.cursor()
 
-    cur.execute("SELECT * FROM localita WHERE nome LIKE ?", ('%' + query + '%',))
+    cur.execute("""SELECT * 
+                FROM localita 
+                WHERE nome LIKE ?""", 
+                ('%' + query + '%',))
     risultati = cur.fetchall()
 
     data = []

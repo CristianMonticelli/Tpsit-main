@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>COUNTRIES SOAP SERVICES</title>
+    </head>
+    <body>
+        <h1>COUNTRIES SOAP SERVICES</h1>
+        {% if response or result %}
+        <h2>SOAP RESPONSE</h2>
+        <div class="response">
+            {% if response %}
+            <div>{{ response }}</div>
+            {% else %}
+            {{ result }}
+            {% endif %}
+        </div>
+        {% else %}
+        <h2>SOAP REQUEST</h2>
+        <div class="request">
+            <form method="POST">
+                <label for="isocode">CODICE ISO</label>
+                <input type="text" name="isocode" />
+                <button type="submit">invia</button>    
+            </form>
+        </div>
+        <div class="oplist">Servizi disponibili -> {{ oplist }}</div>
+            {% if countries %}
+            <table>
+                <tr><th>ISO CODE</th><th>Country</th></tr>
+            {% for country in countries %}
+                <tr>
+                    <td>{{ country.sISOCode }}</td><td>{{ country.sName }}</td>
+                </tr>
+            {% endfor %}
+            </table>
+            {% endif %}
+        {% endif %}
+    </body>
+</html>
